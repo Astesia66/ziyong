@@ -1,8 +1,8 @@
- - name: Build Kernel
+    - name: Build Kernel
       run: |
         chmod +x build.sh build-miui.sh
         
-        # 🚨 绝杀：直接从底层 Kconfig 中删掉这行依赖，强行禁用 SHADOW_CALL_STACK
+        # Force disable SHADOW_CALL_STACK by removing Kconfig dependency
         sed -i '/select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK/d' arch/arm64/Kconfig
         
         echo "Using script: ${{ inputs.script }}"
@@ -14,7 +14,7 @@
           echo "Building without KernelSU..."
           bash ${{ inputs.script }} ${{ inputs.device }}
         fi
-
+      
 on:
   workflow_dispatch:
     inputs:
